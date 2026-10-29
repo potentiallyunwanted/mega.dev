@@ -1,7 +1,7 @@
 # #4471, split
 
 Ticket #4471 on the support desk was merged from 412 reports about dates, and marked known: one
-cause, one fix queued. It holds three faults, not one. This repo is the split.
+cause, one fix queued. It holds more than one fault. This repo is the split.
 
 ## The tickets
 
@@ -11,11 +11,17 @@ Each is an issue here, carrying the number of reports it covers.
 |---|---|---|
 | [#1](../../issues/1) | 379 | The shared parser reads dates month first; every tenant on file writes the day first |
 | [#2](../../issues/2) | 33 | `booking-v3` prints an `MM/DD/YYYY` hint to day-first tenants, then reads what they type their way |
-| [#3](../../issues/3) | 5 | A one-day move, not a swap: time zones and daylight saving |
 
-The 5 on ticket #3 are a subset of the 379 on ticket #1. They are listed twice deliberately, and
-both tickets say so. The desk's own notes already flag those five; they were counted under the
-parser and footnoted, which is how a separate bug stayed invisible inside a bigger number.
+### Counted inside #1
+
+Five reports describe a one-day move rather than a month and day swapping places. The desk had
+already spotted them and keeps their ids in `desk-notes.json`; they stay counted under the parser
+and footnoted, which is how the desk counts them. [#3](../../issues/3) was opened for them and then
+closed back into #1.
+
+They still deserve reading before the parser fix is called done. One of the five describes an
+invite that arrived before its own booking was made, and another a single meeting held twice
+because two cities saw two different days. Neither is a month-first parse.
 
 ## The page
 

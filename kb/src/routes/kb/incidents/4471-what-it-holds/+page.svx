@@ -30,19 +30,19 @@ ships some reports twice, so the ticket is smaller than it looks — and `unique
 `#lib/kb/causes` exists because of it.
 </Callout>
 
-## Why one ticket held three
+## Why one ticket held more than one
 
 [Decision 0001](/kb/decisions/0001-dedupe-by-subject) merges a report into an open ticket when its
 subject line matches, lowercased and stripped of punctuation. Nobody reads the body. That is the
 right trade on an incident morning and it is why triage keeps up.
 
 It also means a ticket is only ever as precise as its subject lines. "Date is wrong" is the subject
-people reach for whatever went wrong with their date, so three faults with one symptom collapse into
-one thread. The decision records this consequence, but names it the other way round: different
+people reach for whatever went wrong with their date, so several faults with one symptom collapse
+into one thread. The decision records this consequence, but names it the other way round: different
 subjects splitting one bug. The reverse — one subject hiding several bugs — costs more, because it
 is invisible. The ticket looks handled.
 
-## The three
+## The two
 
 Each is filed as its own ticket, with the number of reports it covers:
 
@@ -52,11 +52,18 @@ Each is filed as its own ticket, with the number of reports it covers:
   type what the hint asks for, and the form then reads it the tenant's way. Same symptom, different
   fault, and the parser fix does not touch it. Only reports through the booking form, and only from
   the three tenants on that form.
-- **A one-day move.** Not a month and day swapping places: dates off by exactly one day, with
-  daylight saving and time zones underneath. The desk had already spotted these and kept their ids
-  in `desk-notes.json`, counted under the parser row and footnoted. One of them describes an invite
-  that arrived before its own booking was made. Another describes a single meeting held twice,
-  because two cities saw two different days.
+
+### And one thing counted inside the first
+
+A handful of reports describe a one-day move rather than a month and day swapping places: dates off
+by exactly one day, with daylight saving and time zones underneath. The desk had already spotted
+these and keeps their ids in `desk-notes.json`. They stay counted under the parser row and
+footnoted, as the desk counts them.
+
+They are worth reading before the parser fix is called done. One describes an invite that arrived
+before its own booking was made. Another describes a single meeting held twice, because two cities
+saw two different days. Neither of those can be a month-first parse, and neither will be fixed by
+correcting one.
 
 ## What intake cannot tell you
 
@@ -76,7 +83,7 @@ be corrected by leaning one way.
 
 ## Lessons
 
-- A big ticket is mostly one bug reported many times. Sometimes it is three, and the subject line
+- A big ticket is mostly one bug reported many times. Sometimes it is several, and the subject line
   cannot tell you which.
 - Merging early is cheap. Never re-reading the merge is what costs.
 

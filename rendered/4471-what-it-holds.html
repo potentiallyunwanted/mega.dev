@@ -44,27 +44,29 @@ subject line.</p> <h2>What is in the ticket</h2> <p class="sum svelte-xskqqx"><s
   412 reports, in both directions.</p><!----> <p>Every row is a different fault with a different fix. The queued parser fix closes the first one
 and leaves the others arriving.</p> <aside class="warn svelte-17bri61"><!---->The count the desk has been quoting comes from the exported rows, not the reports. The export
 ships some reports twice, so the ticket is smaller than it looks — and `uniqueById` in
-`#lib/kb/causes` exists because of it.<!----></aside><!----> <h2>Why one ticket held three</h2> <p><a href="/kb/decisions/0001-dedupe-by-subject">Decision 0001</a> merges a report into an open ticket when its
+`#lib/kb/causes` exists because of it.<!----></aside><!----> <h2>Why one ticket held more than one</h2> <p><a href="/kb/decisions/0001-dedupe-by-subject">Decision 0001</a> merges a report into an open ticket when its
 subject line matches, lowercased and stripped of punctuation. Nobody reads the body. That is the
 right trade on an incident morning and it is why triage keeps up.</p> <p>It also means a ticket is only ever as precise as its subject lines. “Date is wrong” is the subject
-people reach for whatever went wrong with their date, so three faults with one symptom collapse into
-one thread. The decision records this consequence, but names it the other way round: different
+people reach for whatever went wrong with their date, so several faults with one symptom collapse
+into one thread. The decision records this consequence, but names it the other way round: different
 subjects splitting one bug. The reverse — one subject hiding several bugs — costs more, because it
-is invisible. The ticket looks handled.</p> <h2>The three</h2> <p>Each is filed as its own ticket, with the number of reports it covers:</p> <ul><li><strong>The shared parser reads month first.</strong> Every tenant on file writes the day first, so dates come
+is invisible. The ticket looks handled.</p> <h2>The two</h2> <p>Each is filed as its own ticket, with the number of reports it covers:</p> <ul><li><strong>The shared parser reads month first.</strong> Every tenant on file writes the day first, so dates come
 out flipped. This is the bug the desk already knows, and the queued fix is the right fix for it.</li> <li><strong>The <code>booking-v3</code> form prints an <code>MM/DD/YYYY</code> hint.</strong> Its tenants are day-first. Their people
 type what the hint asks for, and the form then reads it the tenant’s way. Same symptom, different
 fault, and the parser fix does not touch it. Only reports through the booking form, and only from
-the three tenants on that form.</li> <li><strong>A one-day move.</strong> Not a month and day swapping places: dates off by exactly one day, with
-daylight saving and time zones underneath. The desk had already spotted these and kept their ids
-in <code>desk-notes.json</code>, counted under the parser row and footnoted. One of them describes an invite
-that arrived before its own booking was made. Another describes a single meeting held twice,
-because two cities saw two different days.</li></ul> <h2>What intake cannot tell you</h2> <p>Intake guesses a cause from the reporter’s browser locale at the moment a report arrives. It never
+the three tenants on that form.</li></ul> <h3>And one thing counted inside the first</h3> <p>A handful of reports describe a one-day move rather than a month and day swapping places: dates off
+by exactly one day, with daylight saving and time zones underneath. The desk had already spotted
+these and keeps their ids in <code>desk-notes.json</code>. They stay counted under the parser row and
+footnoted, as the desk counts them.</p> <p>They are worth reading before the parser fix is called done. One describes an invite that arrived
+before its own booking was made. Another describes a single meeting held twice, because two cities
+saw two different days. Neither of those can be a month-first parse, and neither will be fixed by
+correcting one.</p> <h2>What intake cannot tell you</h2> <p>Intake guesses a cause from the reporter’s browser locale at the moment a report arrives. It never
 looks up which tenant sent it or which booking form they run, and those are what decide the cause.
 The table above counts how often that guess is wrong. It is wrong in both directions, so it cannot
 be corrected by leaning one way.</p> <h2>What to change</h2> <ol><li>Split #4471 into one ticket per fault and keep the counts separate. Closing the parser fix
 should not close the other two.</li> <li>Have intake record the tenant and the form, not the browser’s guess. The cause follows from
 those two facts and <code>causeOf</code> already computes it.</li> <li>Leave decision 0001 as it stands — it is accepted and it is right for triage. Add the step after
-it: when a ticket passes a few hundred reports, count it by cause before calling it known.</li></ol> <h2>Lessons</h2> <ul><li>A big ticket is mostly one bug reported many times. Sometimes it is three, and the subject line
+it: when a ticket passes a few hundred reports, count it by cause before calling it known.</li></ol> <h2>Lessons</h2> <ul><li>A big ticket is mostly one bug reported many times. Sometimes it is several, and the subject line
 cannot tell you which.</li> <li>Merging early is cheap. Never re-reading the merge is what costs.</li></ul> <!--[0--><p class="stamp svelte-1280m42">desk ref <b class="svelte-1280m42">DR-YQJM-R2JE</b></p><!--]--><!----><!----></main> <footer class="svelte-e2jw2j">Pages are written by people. Tables and charts are built from data at render time.</footer></div><!--]--><!----><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
 			
 			
