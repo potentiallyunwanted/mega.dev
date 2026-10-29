@@ -1,0 +1,83 @@
+---
+layout: runbook
+title: '#4471 · what it holds'
+owner: potentiallyunwanted
+status: proposed
+reviewed: 2026-10-28
+signature: v1.eyJzdWIiOiI0OTExIiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMyMzc4MDUsImV4cCI6MTc5MzMyNDIwNX0.8II7w_q6RhGcTXVjoalAT6Z3F0w5phPyf2ZEsohCm5k
+---
+
+<script>
+  import SplitTable from '#lib/kb/SplitTable.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+[#4471](/kb/incidents/4471) is marked known, with one cause and one fix queued. It holds more
+than one problem. This page is what the export says when you count it by cause instead of by
+subject line.
+
+## What is in the ticket
+
+<SplitTable ticket={4471} />
+
+Every row is a different fault with a different fix. The queued parser fix closes the first one
+and leaves the others arriving.
+
+<Callout kind="warn">
+The count the desk has been quoting comes from the exported rows, not the reports. The export
+ships some reports twice, so the ticket is smaller than it looks — and `uniqueById` in
+`#lib/kb/causes` exists because of it.
+</Callout>
+
+## Why one ticket held three
+
+[Decision 0001](/kb/decisions/0001-dedupe-by-subject) merges a report into an open ticket when its
+subject line matches, lowercased and stripped of punctuation. Nobody reads the body. That is the
+right trade on an incident morning and it is why triage keeps up.
+
+It also means a ticket is only ever as precise as its subject lines. "Date is wrong" is the subject
+people reach for whatever went wrong with their date, so three faults with one symptom collapse into
+one thread. The decision records this consequence, but names it the other way round: different
+subjects splitting one bug. The reverse — one subject hiding several bugs — costs more, because it
+is invisible. The ticket looks handled.
+
+## The three
+
+Each is filed as its own ticket, with the number of reports it covers:
+
+- **The shared parser reads month first.** Every tenant on file writes the day first, so dates come
+  out flipped. This is the bug the desk already knows, and the queued fix is the right fix for it.
+- **The `booking-v3` form prints an `MM/DD/YYYY` hint.** Its tenants are day-first. Their people
+  type what the hint asks for, and the form then reads it the tenant's way. Same symptom, different
+  fault, and the parser fix does not touch it. Only reports through the booking form, and only from
+  the three tenants on that form.
+- **A one-day move.** Not a month and day swapping places: dates off by exactly one day, with
+  daylight saving and time zones underneath. The desk had already spotted these and kept their ids
+  in `desk-notes.json`, counted under the parser row and footnoted. One of them describes an invite
+  that arrived before its own booking was made. Another describes a single meeting held twice,
+  because two cities saw two different days.
+
+## What intake cannot tell you
+
+Intake guesses a cause from the reporter's browser locale at the moment a report arrives. It never
+looks up which tenant sent it or which booking form they run, and those are what decide the cause.
+The table above counts how often that guess is wrong. It is wrong in both directions, so it cannot
+be corrected by leaning one way.
+
+## What to change
+
+1. Split #4471 into one ticket per fault and keep the counts separate. Closing the parser fix
+   should not close the other two.
+2. Have intake record the tenant and the form, not the browser's guess. The cause follows from
+   those two facts and `causeOf` already computes it.
+3. Leave decision 0001 as it stands — it is accepted and it is right for triage. Add the step after
+   it: when a ticket passes a few hundred reports, count it by cause before calling it known.
+
+## Lessons
+
+- A big ticket is mostly one bug reported many times. Sometimes it is three, and the subject line
+  cannot tell you which.
+- Merging early is cheap. Never re-reading the merge is what costs.
+
+<RenderStamp {signature} />
